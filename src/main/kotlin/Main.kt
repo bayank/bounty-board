@@ -4,7 +4,7 @@ fun main() {
     println("The hero announces her presence to the world.")
 
     println(HERO_NAME)
-    var playerLevel = 10
+    var playerLevel = 8
     println(playerLevel)
     val hasBefriendedBarbarians = true
     val hasAngeredBarbarians = false
