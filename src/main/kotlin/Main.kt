@@ -1,14 +1,11 @@
+import java.lang.IllegalArgumentException
 
 const val HERO_NAME = "Madrigal"
 var playerLevel = 0
 fun main() {
     println("$HERO_NAME announces her presence to the world.")
     println("What level is $HERO_NAME?")
-    val playerLevelInput = readLine()!!
-    playerLevel = if (playerLevelInput.matches("""\d+""".toRegex())) {
-        playerLevelInput.toInt()
-    } else {
-        1 }
+    playerLevel = readLine()?.toIntOrNull() ?: 0
     println("$HERO_NAME's level is $playerLevel.")
 
     readBountyBoard()
@@ -26,7 +23,7 @@ fun shouldReturnAString(): String{
 private fun readBountyBoard() {
     val quest: String? = obtainQuest(playerLevel)
 
-    val message: String = quest?.replace("Nogartse", "xxxxxxxx")
+    val message: String = quest?.replace("Nogartse", "He who shall not be named")
         ?.let{ censoredQuest ->
             """
             |$HERO_NAME approaches the bounty board. It reads:
@@ -41,7 +38,11 @@ private fun obtainQuest(
     playerClass: String = "paladin",
     hasBefriendedBarbarians: Boolean = true,
     hasAngeredBarbarians: Boolean = false //sets a default value false if not defined in the fun call
-): String? = when (playerLevel) {
+): String? {
+    if (playerLevel <= 0) {
+        throw IllegalArgumentException("The player's level must be at least 1.")
+    }
+    return when (playerLevel) {
         1 -> "Meet Mr. Bubbles in the land of soft things."
         in 2..5 -> {
             // Check if diplomacy is an option
@@ -59,4 +60,5 @@ private fun obtainQuest(
         8 -> "Defeat Nogartse, bringer of death and eater of worlds."
         //else -> "There are no quests right now."
         else -> null
+    }
 }
